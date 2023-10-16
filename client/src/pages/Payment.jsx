@@ -76,7 +76,7 @@ const Payment = () => {
   const loadStripe = () => {
     setStripeLoading(true);
     // if (price) {
-    fetch("http://localhost:4242/create-payment-intent", {
+    fetch("https://localhost:4242/create-payment-intent", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ amount: price }),
