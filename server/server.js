@@ -13,7 +13,9 @@ const _dirname = path.dirname("");
 const buildPath = path.join(_dirname, "../client/build");
 app.use(express.static(buildPath));
 app.use(express.json());
-app.use(cors());
+app.use(
+  cors({ origin: ["http://freetownrentals.com", "http://127.0.0.1:5173"] })
+);
 
 app.get("/*", function (req, res) {
   res.sendFile(
