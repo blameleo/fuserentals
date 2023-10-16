@@ -12,7 +12,8 @@ import { Elements } from "@stripe/react-stripe-js";
 import CheckoutForm from "../components/CheckoutForm";
 import axios from "axios";
 
-const key = import.meta.env.VITE_REACT_APP_STRIPE_PUBLIC_KEY;
+const key =
+  "pk_live_51LREOdJTeRCvMO4Vka9RCDb8hMaSecOmPDRxx7XNlFFXVuRD9AiLmFfEOl1xdbSVImKgm8AWBSwrN18Yi8yIpGKb004OvtkoBa";
 
 const stripePromise = loadStripe(key);
 
@@ -75,7 +76,7 @@ const Payment = () => {
   const loadStripe = () => {
     setStripeLoading(true);
     // if (price) {
-    fetch("https://fuserentalbackend.onrender.com/create-payment-intent", {
+    fetch("http://localhost:4242/create-payment-intent", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ amount: price }),

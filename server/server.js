@@ -4,7 +4,9 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 // This is your test secret API key.
-const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
+const stripe = require("stripe")(
+  "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"
+);
 const path = require("path");
 
 const _dirname = path.dirname("");
