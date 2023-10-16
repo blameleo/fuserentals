@@ -14,7 +14,9 @@ const buildPath = path.join(_dirname, "../client/build");
 app.use(express.static(buildPath));
 app.use(express.json());
 app.use(
-  cors({ origin: ["https://freetownrentals.com", "http://127.0.0.1:5173"] })
+  cors({
+    origin: ["https://freetownrentals.com", "https://www.freetownrentals.com"],
+  })
 );
 
 app.get("/*", function (req, res) {
