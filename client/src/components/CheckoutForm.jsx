@@ -113,7 +113,7 @@ export default function CheckoutForm({ sendEmail }) {
         </h1>
         <div className="bg-gray-500 text-white text-[5px] flex items-center p-2 rounded-[6px]">
           Powered by{" "}
-          <span className="font-black sm:text-[10px] ml-2">PAYSTACK</span>
+          <span className="font-black sm:text-[10px] ml-2">STRIPE</span>
         </div>
       </div>
       {message && <div id="payment-message">{message}</div>}
