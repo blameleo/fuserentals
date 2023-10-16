@@ -15,7 +15,7 @@ app.use(express.static(buildPath));
 app.use(express.json());
 app.use(
   cors({
-    origin: ["https://freetownrentals.com", "https://www.freetownrentals.com"],
+    origin: ["https://freetownrentals.com", "http://www.freetownrentals.com"],
   })
 );
 
