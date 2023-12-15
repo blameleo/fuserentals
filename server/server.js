@@ -8,6 +8,7 @@ const stripe = require("stripe")(
   "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"
 );
 const path = require("path");
+const { smartPayRouter } = require("./routes/smartPayRoutes");
 
 const _dirname = path.dirname("");
 const buildPath = path.join(_dirname, "../client/build");
@@ -15,9 +16,17 @@ app.use(express.static(buildPath));
 app.use(express.json());
 app.use(
   cors({
-    origin: ["https://freetownrentals.com", "https://www.freetownrentals.com"],
+    origin: [
+      "https://freetownrentals.com",
+      "https://www.freetownrentals.com",
+      "http://127.0.0.1:5173",
+      "http://localhost:4242/smartpay/auth",
+      "http://localhost:5173",
+    ],
   })
 );
+
+app.use("/smartpay", smartPayRouter);
 
 app.get("/*", function (req, res) {
   res.sendFile(

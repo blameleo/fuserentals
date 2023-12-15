@@ -9,6 +9,8 @@ import { PiHandbagSimpleLight } from "react-icons/pi";
 // Import useHistory for navigation
 
 const Booking = () => {
+  const navigate = useNavigate();
+  const formData = JSON.parse(localStorage.getItem("formData"));
   const [price, setPrice] = useState({
     CityCar: 0,
     Small4x4: 0,
@@ -16,19 +18,13 @@ const Booking = () => {
     SevenSeater: 0,
   });
   const pricingData = {
-    "1 hour": {
+    Hourly: {
       FreetownPeninsula: {
         CityCar: 20,
         Small4x4: 20,
         Rugged4x4: 30,
         SevenSeater: 30,
       },
-      // Province: {
-      //   CityCar: 20,
-      //   Small4x4: 25,
-      //   Rugged4x4: 30,
-      //   SevenSeater: 35,
-      // },
     },
     "1/2 Day": {
       FreetownPeninsula: {
@@ -37,12 +33,6 @@ const Booking = () => {
         Rugged4x4: 50,
         SevenSeater: 50,
       },
-      // Province: {
-      //   CityCar: 40,
-      //   Small4x4: 45,
-      //   Rugged4x4: 50,
-      //   SevenSeater: 55,
-      // },
     },
 
     Day: {
@@ -60,35 +50,9 @@ const Booking = () => {
       },
     },
   };
-  const navigate = useNavigate();
-  const formData = JSON.parse(localStorage.getItem("formData"));
+
   console.log(formData);
-  const handleBookCarOne = (carType, carPrice) => {
-    const existingData = JSON.parse(localStorage.getItem("formData")) || {};
-    const carDetails = {
-      type: carType,
-      price: carPrice,
-    };
-    const updatedData = {
-      ...existingData,
-      carDetails: carDetails,
-    };
-    localStorage.setItem("formData", JSON.stringify(updatedData));
-    console.log(updatedData);
-  };
-  const handleBookCarTwo = (carType, carPrice) => {
-    const existingData = JSON.parse(localStorage.getItem("formData")) || {};
-    const carDetails = {
-      type: carType,
-      price: carPrice,
-    };
-    const updatedData = {
-      ...existingData,
-      carDetails: carDetails,
-    };
-    localStorage.setItem("formData", JSON.stringify(updatedData));
-    console.log(updatedData);
-  };
+
   const handleBookCar = (carType, carPrice, carImage) => {
     const existingData = JSON.parse(localStorage.getItem("formData")) || {};
     const carDetails = {
@@ -106,20 +70,21 @@ const Booking = () => {
   };
 
   useEffect(() => {
-    // Calculate the price based on selected options
-    // if (bookingType || selectedCar) {
     if (formData.hours) {
+      console.log(formData.selectedValue);
+      console.log(formData?.bookingType);
       const cityCarPrice =
-        pricingData[formData.selectedValue][formData.bookingType]["CityCar"] *
+        pricingData[formData.bookingType][formData.selectedValue]["CityCar"] *
         formData.hours;
+      console.log(cityCarPrice);
       const Small4x4 =
-        pricingData[formData.selectedValue][formData.bookingType]["Small4x4"] *
+        pricingData[formData.bookingType][formData.selectedValue]["Small4x4"] *
         formData.hours;
       const Rugged4x4 =
-        pricingData[formData.selectedValue][formData.bookingType]["Rugged4x4"] *
+        pricingData[formData.bookingType][formData.selectedValue]["Rugged4x4"] *
         formData.hours;
       const SevenSeater =
-        pricingData[formData.selectedValue][formData.bookingType][
+        pricingData[formData.bookingType][formData.selectedValue][
           "SevenSeater"
         ] * formData.hours;
 
@@ -131,13 +96,13 @@ const Booking = () => {
       });
     } else {
       const cityCarPrice =
-        pricingData[formData.selectedValue][formData.bookingType]["CityCar"];
+        pricingData[formData.bookingType][formData.selectedValue]["CityCar"];
       const Small4x4 =
-        pricingData[formData.selectedValue][formData.bookingType]["Small4x4"];
+        pricingData[formData.bookingType][formData.selectedValue]["Small4x4"];
       const Rugged4x4 =
-        pricingData[formData.selectedValue][formData.bookingType]["Rugged4x4"];
+        pricingData[formData.bookingType][formData.selectedValue]["Rugged4x4"];
       const SevenSeater =
-        pricingData[formData.selectedValue][formData.bookingType][
+        pricingData[formData.bookingType][formData.selectedValue][
           "SevenSeater"
         ];
 
@@ -148,11 +113,8 @@ const Booking = () => {
         SevenSeater: SevenSeater,
       });
     }
-
-    // console.log(cityCarPrice, Small4x4, Rugged4x4, SevenSeater);
-
-    // }
   }, []);
+
   return (
     <div>
       <Navbar />

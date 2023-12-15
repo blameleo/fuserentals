@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-import { useNavigate } from "react-router-dom";
-import { PaystackButton } from "react-paystack";
-import { GiPadlock } from "react-icons/gi";
+import { Navigate, useNavigate } from "react-router-dom";
 import emailjs from "emailjs-com";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
+import Modal from "@mui/material/Modal";
 
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
@@ -67,6 +69,7 @@ const Payment = () => {
     const formData = JSON.parse(localStorage.getItem("formData")) || {};
     console.log(formData);
     setFormData(formData);
+    setAmount(formData.carDetails.price);
   }, []);
 
   const [clientSecret, setClientSecret] = useState("");
@@ -100,6 +103,73 @@ const Payment = () => {
   const options = {
     clientSecret,
     appearance,
+  };
+
+  const payWithSmartPay = async () => {
+    alert("sdsa");
+  };
+
+  const style = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: 400,
+    bgcolor: "background.paper",
+    border: "2px solid #000",
+    boxShadow: 24,
+    p: 4,
+  };
+
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
+  const [walletNo, setWalletNo] = useState("");
+  const [pin, setPin] = useState("");
+  const [error, setError] = useState("");
+  const [token, setToken] = useState("");
+
+  const [amount, setAmount] = useState(price);
+  console.log(amount);
+
+  const handleFormSubmit = async (e) => {
+    e.preventDefault();
+    // You can access walletNo, pin, and amount here for further processing
+    // console.log("Wallet Number:", walletNo);
+    // console.log("Pin:", pin);
+    // console.log("Amount:", amount);
+
+    const formData = {
+      email: walletNo,
+      password: pin,
+      amount,
+      merchantUserId: "",
+    };
+
+    console.log(formData);
+    setLoading(true);
+
+    try {
+      const response = await axios.post(
+        "http://localhost:4242/smartpay/pay",
+        formData
+      );
+
+      // Assuming the response structure contains a token property
+      console.log(response);
+      setError(response.data.responseMessage);
+
+      if (response.data.responseMessage === "Success") {
+        setLoading(false);
+        navigate("/paysuccess");
+      }
+    } catch (error) {
+      // Handle errors
+      console.log(error);
+      setError(error.response?.data.error);
+      setLoading(false);
+    }
   };
 
   return (
@@ -216,6 +286,64 @@ const Payment = () => {
           >
             {loading ? "loading...." : "pay with cash"}
           </button>
+          <button
+              className="bg-white text-center  w-[300px] mx-auto  cursor-pointer border border-black hover:bg-gray-600 hover:text-white text-black px-20 py-2 rounded-xl font-bold mt-4"
+              onClick={handleOpen}
+            >
+              smart pay
+            </button>
+          {/* <button
+            onClick={() => payWithSmartPay()}
+            className="bg-white text-center  w-[300px] mx-auto  cursor-pointer border border-black hover:bg-gray-600 hover:text-white text-black px-20 py-2 rounded-xl font-bold mt-4"
+          >
+            {loading ? "loading...." : "smartpay"}
+          </button> */}
+
+          <div classname="">
+
+            <Modal
+              open={open}
+              onClose={handleClose}
+              aria-labelledby="modal-modal-title"
+              aria-describedby="modal-modal-description"
+            >
+              <Box sx={style}>
+                <h1 className="text-blue-500">
+                  Enter your smart pay credentials to complete your booking{" "}
+                </h1>
+                {error && <span className="text-red-500">{error}</span>}
+                <form onSubmit={handleFormSubmit} className="flex flex-col">
+                  <label htmlFor="">
+                    Wallet no <span className="text-red-500">*</span> :
+                  </label>
+                  <input
+                    type="text"
+                    value={walletNo}
+                    onChange={(e) => setWalletNo(e.target.value)}
+                  />
+
+                  <label htmlFor="">
+                    Pin <span className="text-red-500">*</span> :
+                  </label>
+                  <input
+                    type="text"
+                    value={pin}
+                    onChange={(e) => setPin(e.target.value)}
+                  />
+
+                  <label htmlFor="">Amount:</label>
+                  <input type="text" value={amount} />
+
+                  <button
+                    className="bg-black text-white mt-5 rounded-lg py-1"
+                    type="submit"
+                  >
+                    {loading ? "loading...." : "Pay"}
+                  </button>
+                </form>
+              </Box>
+            </Modal>
+          </div>
         </div>
       </div>
 
